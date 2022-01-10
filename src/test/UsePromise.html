@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        //什么情况下用promise?
+        //一般情况下有异步操作时，使用promise对这个异步操作进行封装 变成一个链式编程
+        //new -> 构造函数(1.保存了一些状态信息 2.执行传入的函数)
+        //在执行传入的回调函数中，会传入两个参数，resolve，reject 他们本身又是函数
+        new Promise((resolve, reject) => {
+            setTimeout(() => {
+                //成功的情况执行resolve
+                // resolve("success")
+                //失败的情况下执行reject
+                reject("error")
+            }, 2000)
+        }).then((data) => {
+            window.alert("执行了正确的异步网络请求 " + data)
+        }).catch((err) => {
+            window.alert("如果请求错误，显示错误信息 " + err)
+        })
+
+        //promise的另一种写法
+        new Promise((resolve, reject) => {
+            console.log("//promise的另一种写法")
+            // resolve("right")
+            reject("error")
+        }).then(data => {
+                console.log(data)
+            },
+            err => {
+                console.log(err)
+            })
+
+        //promise的链式调用
+        new Promise((resolve, reject) => {
+            setTimeout(() => {
+                console.log("\n//promise的链式调用")
+                resolve("aaa")
+            }, 2000)
+        }).then(res => {
+            //自己处理10行代码
+            console.log(res + "第一次处理的10行代码")
+            //对结果进行第一次处理
+            return new Promise((resolve) => {
+                resolve(res + "111")
+            })
+        }).then(res => {
+            console.log(res, "第二次处理的10行代码")
+            return new Promise(resolve => {
+                resolve(res + "222")
+            })
+        }).then(res => {
+            console.log(res, "第三次处理的10行代码")
+        })
+
+
+        new Promise((resolve, reject) => {
+            setTimeout(() => {
+                console.log("\n//promise的链式调用-resolve结果简写\n")
+                resolve("aaa")
+            }, 2000)
+        }).then(res => {
+            //自己处理10行代码
+            console.log(res + "第一次处理的10行代码")
+            //对结果进行第一次处理
+            return Promise.resolve(res + "111")
+
+        }).then(res => {
+            console.log(res, "第二次处理的10行代码")
+            return Promise.resolve(res + "222")
+
+        }).then(res => {
+            console.log(res, "第三次处理的10行代码")
+        })
+
+        //继续省略
+        new Promise((resolve, reject) => {
+            setTimeout(() => {
+                console.log("\n//promise的链式调用-resolve结果简写，并且连promise都省略掉\n")
+                resolve("aaa")
+            }, 2000)
+        }).then(res => {
+            //自己处理10行代码
+            console.log(res + "第一次处理的10行代码")
+            //对结果进行第一次处理
+            return res + "111"
+        }).then(res => {
+            console.log(res, "第二次处理的10行代码")
+            return res + "222"
+        }).then(res => {
+            console.log(res, "第三次处理的10行代码")
+        })
+        //抛出异常的简写
+        //继续省略
+        new Promise((resolve, reject) => {
+            setTimeout(() => {
+                console.log("\n//promise的链式调用-resolve结果简写,抛出异常\n")
+                resolve("aaa")
+            }, 2000)
+        }).then(res => {
+            //自己处理10行代码
+            console.log(res + "第一次处理的10行代码")
+            //假设程序出现了异常
+            //写法一
+            // return Promise.reject('error message')
+            //写法二
+            throw 'error message by throwing'
+            //对结果进行第一次处理
+            return res + "111"
+        }).then(res => {
+            console.log(res, "第二次处理的10行代码")
+            return res + "222"
+        }).then(res => {
+            console.log(res, "第三次处理的10行代码")
+        }).catch(err => {
+            console.log(err)
+        })
+
+        //如果某个需求 需要多个网络请求，如何处理
+        //放入可迭代对象iterator，比如说数组
+        Promise.all([
+            new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve("result1")
+                }, 4000)
+            }),
+            new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve({
+                        name: "result2",
+                        age: "18"
+                    })
+                }, 3000)
+            })
+        ]).then(results => {
+            //都请求完毕后来进行处理
+            console.log("如果某个需求 需要多个网络请求，如何处理")
+            console.log(results);
+        })
+    </script>
+</body>
+
+</html>

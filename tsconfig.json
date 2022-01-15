@@ -3,7 +3,7 @@
     // "noImplicitAny": false,//变量是什么都可以
     "target": "esnext",
     "module": "esnext",
-    "strict": true,
+    "strict": false,//改为false 解决Parameter 'res' implicitly has an 'any' type.的问题，参考https://blog.csdn.net/cc6_66/article/details/111246575
     "jsx": "preserve",
     "importHelpers": true,
     "moduleResolution": "node",

@@ -1,4 +1,5 @@
 body {
+  height: fit-content;
  padding: auto;
  margin: 0;
 }
